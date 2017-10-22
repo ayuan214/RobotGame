@@ -15,20 +15,20 @@ ZenvaRunner.MainMenu.prototype = {
 
 		//create player
 		this.player = this.add.sprite(200, this.game.height/2, 'player');
-		this.player.anchor.setTo(0.5); //determines where the rotation would occur of sprite as well
-		this.player.scale.setTo(1.1); //scales down sprite
+		//this.createPlayer(); 
+		//this.player.anchor.setTo(0.5); //determines where the rotation would occur of sprite as well
+		//this.player.scale.setTo(1.1); //scales down sprite
 
-		this.player.animations.add('fly', [0,1,2,1]);
-		this.player.animations.play('fly', 8, true); //this.player.animations.play(key, fps, loop?)
+		//this.player.animations.add('fly', [0,1,2,3,2,1]);
+		//this.player.animations.play('fly', 8, true); //this.player.animations.play(key, fps, loop?)
 
-		this.game.add.tween(this.player).to({y: this.player.y - 16}, 500, Phaser.Easing.Linear.NONE, true, 0, Infinity, true); 
+		//this.game.add.tween(this.player).to({y: this.player.y - 16}, 500, Phaser.Easing.Linear.NONE, true, 0, Infinity, true); 
 		// Having a person bounce in midair
 		//tween is game object animation. Add a tween object .to (JSON object of objects want to change [this game y], 500 ms the player y position is, BOB up and down, easing, auto start, don't add delay [0], repeat infinite, and want to yo-yo is to come back up and down )
 
 		//Adding titles
 		this.splash = this.add.sprite(this.game.world.centerX, this.game.world.centerY, 'logo');
 		this.splash.anchor.setTo(0.5);
-		this.splash.scale.setTo(0.5);
 
 		this.startText = this.game.add.bitmapText(0,0, 'minecraftia', 'tap to start', 32);
 		this.startText.x = this.game.width/2 - this.startText.textWidth/2; 
@@ -37,8 +37,17 @@ ZenvaRunner.MainMenu.prototype = {
 	},
 
 	update: function() {
+		//Player.inflight(); 
 		if(this.game.input.activePointer.justPressed()){
 			this.game.state.start('Game');
 		}
+	},
+
+	createPlayer: function() {
+		//var player = this.player;
+		//var x = 200;
+		//var y = this.game.height/2;  
+		this.player = new Player(this.game, 0, 0);
+		this.player.straightFlight(); 
 	}
 }

@@ -20,7 +20,7 @@ ZenvaRunner.Preload.prototype = {
 		//this.load.spritesheet('coins', 'assets/images/coins-ps.png', 51, 51, 7);
 		//this.load.spritesheet('player', 'assets/images/jetpack-ps.png', 229, 296, 4);
 		this.load.spritesheet('coins', 'assets/images/EnergyCapsule.png', 20, 31, 10);
-		this.load.spritesheet('player', 'assets/images/WingZero_Flight3.png', 110, 72, 3);
+		this.load.spritesheet('player', 'assets/images/WingZero_Flight4.png', 110, 96, 4);
 		this.load.spritesheet('missile', 'assets/images/missiles-ps.png', 361, 218, 4);
 
 

@@ -37,8 +37,9 @@ ZenvaRunner.Game.prototype = {
 		this.player.anchor.setTo(0.5); //determines where the rotation would occur of sprite as well
 		this.player.scale.setTo(1.1); //scales down sprite
 
-		this.player.animations.add('fly', [0,1,2,3,2,1]);
+		this.player.animations.add('fly', [0,1,2,1]);
 		this.player.animations.play('fly', 10, true);
+
 
 		//enable physics
 		this.game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -50,7 +51,7 @@ ZenvaRunner.Game.prototype = {
 
 		this.game.physics.arcade.enableBody(this.player); 
 		this.player.body.collideWorldBounds = true; // prevents player form falling off screen; 
-		this.player.body.bounce.set(0.25); //bounce when hit the ground
+		//this.player.body.bounce.set(0.25, 0.25); //bounce when hit the ground
 
 		this.coins = this.game.add.group();
 
@@ -75,7 +76,7 @@ ZenvaRunner.Game.prototype = {
 
 	},
 	update: function() {
-		 if(this.game.input.activePointer.isDown) {
+		 if(this.game.input.activePointer.isDown && this.gameState == 'Running') {
       		this.player.body.velocity.y -= 40;
       		if(!this.jetSound.isPlaying) {
        			this.jetSound.play('', 0, true, 0.7);
@@ -119,11 +120,14 @@ ZenvaRunner.Game.prototype = {
 
 
 		this.game.physics.arcade.collide(this.player, this.ground, this.groundHit, null, this); // puts player on ground
-		this.game.physics.arcade.overlap(this.player, this.coins, this.coinHit, null, this); //checks overlap to add points
-		this.game.physics.arcade.overlap(this.player, this.enemies, this.enemyHit, null, this); //checks overlap to add points
+		if(this.gameState != "GameOver"){
+			this.game.physics.arcade.overlap(this.player, this.coins, this.coinHit, null, this); //checks overlap to add points
+		}
+		this.game.physics.arcade.overlap(this.player, this.enemies, this.enemyHit, null, this); //checks overlap to end game
 
 	},
 	shutdown: function() {
+		this.player.kill();
 		this.coins.destroy();
 		this.enemies.destroy();
 		this.distance = 0;
@@ -224,7 +228,15 @@ ZenvaRunner.Game.prototype = {
 	},
 
 	groundHit: function(player, ground){
-		player.body.velocity.y =-200; //rotate his body when he hits the ground and bounces 
+		if (this.gameState == 'GameOver') {
+			this.player.angle = 270;
+			//player.body.velocity.y = 0; //rotate his body when he hits the ground and bounces 
+
+		} else {
+			this.player.angle = 0;
+			player.body.velocity.y =-200; //rotate his body when he hits the ground and bounces 
+
+		}
 		//this.gravitySound.play(); 
 
 	},
@@ -248,8 +260,11 @@ ZenvaRunner.Game.prototype = {
 
 	enemyHit: function(player, enemy){
 		this.gameState = 'GameOver';
-		player.kill();
+		//player.kill();
 		enemy.kill();
+		this.player.animations.stop('fly'); 
+		this.player.animations.add('fall', [3]);
+		this.player.animations.play('fall', 1, false);
 		this.deathSound.play(); 
 		this.gameMusic.stop(); 
 
@@ -263,9 +278,15 @@ ZenvaRunner.Game.prototype = {
 		this.enemyTimer = Number.MAX_VALUE; //stops spawning enmies 
 		this.coinTimer = Number.MAX_VALUE; // Stops spawning coins
 
-		var scoreboard = new Scoreboard(this.game);
-		scoreboard.show(this.score);  
+		
+		
+		var deathTween = this.game.add.tween(this.player).to({angle: 270}, 1000, Phaser.Easing.Bounce.Out, true);
+		//scoreboard.show(this.score);
 
-
+		
+		deathTween.onComplete.add(function(){
+			var scoreboard = new Scoreboard(this.game);
+			scoreboard.show(this.score);
+		}, this)  
 	}
 };

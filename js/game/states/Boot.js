@@ -4,11 +4,15 @@ ZenvaRunner.Boot = function(){};
 
 ZenvaRunner.Boot.prototype = {
 	preload: function(){
-		this.load.image('logo', 'assets/images/logo.png');
+		this.load.image('logo', 'assets/images/logo2.png');
 		this.load.image('preloadbar', 'assets/images/preloader-bar.png');
 	},
 	create: function(){
-		this.game.stage.backgroundColor = "#fff";
+		this.game.stage.backgroundColor = "#000";
+		this.splash = this.add.sprite(this.game.world.centerX, this.game.world.centerY, 'logo');
+		this.splash.anchor.setTo(0.5);
+		this.splash.scale.setTo(0.5);
+
 
 		//Unless you specifically knowy our game needs to support multi-touch I would recommend setting this to 1
 		this.input.maxPointers = 1;
