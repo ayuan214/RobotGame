@@ -94,37 +94,25 @@ ZenvaRunner.Game.prototype = {
 	},
 	update: function() {
 
-		if (this.backgroundCounter > 100){
-			//var foregroundFadeTween = this.game.add.tween(this.foreground).to({alpha: 0}, 500, Phaser.Easing.Linear.None, true);
-			//var backgroundFadeTween = this.game.add.tween(this.background).to({alpha: 0}, 500, Phaser.Easing.Linear.None, true);
-			//backgroundFadeTween.onComplete.add(function() {
+		if (this.backgroundCounter > 1000){
 				if (this.backgroundSelector == 0){
 					var foregroundFadeTween = this.game.add.tween(this.foreground).to({alpha: 0}, 500, Phaser.Easing.Linear.None, true);
 					var backgroundFadeTween = this.game.add.tween(this.background).to({alpha: 0}, 500, Phaser.Easing.Linear.None, true);
 					backgroundFadeTween.onComplete.add(function() {
 						var backgroundFadeTween1 = this.game.add.tween(this.background1).to({alpha: 1}, 500, Phaser.Easing.Linear.None, true);
 						var foregroundFadeTween1 = this.game.add.tween(this.foreground1).to({alpha: 1}, 500, Phaser.Easing.Linear.None, true);
-					//this.background.loadTexture('background1');
-					//this.foreground.loadTexture('foreground1');
 					this.backgroundSelector = 1;
 					}, this)  
 				} else {
-					//this.background.loadTexture('background');
-					//this.foreground.loadTexture('foreground');
 					var foregroundFadeTween1 = this.game.add.tween(this.foreground1).to({alpha: 0}, 500, Phaser.Easing.Linear.None, true);
 					var backgroundFadeTween1 = this.game.add.tween(this.background1).to({alpha: 0}, 500, Phaser.Easing.Linear.None, true);
 					backgroundFadeTween1.onComplete.add(function() {
 						var backgroundFadeTween = this.game.add.tween(this.background).to({alpha: 1}, 500, Phaser.Easing.Linear.None, true);
 						var foregroundFadeTween = this.game.add.tween(this.foreground).to({alpha: 1}, 500, Phaser.Easing.Linear.None, true);
-					//this.background.loadTexture('background1');
-					//this.foreground.loadTexture('foreground1');
+
 					this.backgroundSelector = 0;
 					}, this)  
 				}
-				//foregroundFadeTween = this.game.add.tween(this.foreground).to({alpha: 1}, 500, Phaser.Easing.Linear.None, true);
-				//backgroundFadeTween = this.game.add.tween(this.background).to({alpha: 1}, 500, Phaser.Easing.Linear.None, true);
-
-				//}, this)
 				
 			this.backgroundCounter = 0;
 		}
