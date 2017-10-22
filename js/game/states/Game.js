@@ -6,7 +6,7 @@ ZenvaRunner.Game = function() {
 	this.coinRate = 1000; // every 1000 ms new coin
 	this.coinTimer = 0; // what is being checked every game loop to make new coin 
 
-	this.enemyRate = 1000;
+	this.enemyRate = 2000;
 	this.enemyTimer = 0; 
 
 	this.coinScore = 0;
@@ -16,30 +16,35 @@ ZenvaRunner.Game = function() {
 
 	this.coinSpawnX = null;
 	this.coinSpacingX = 10;
-	this.coinSpacingY = 10;  
+	this.coinSpacingY = 10;
+
+	this.backgroundCounter = 0;
+	this.backgroundSelector = 0;   
 };
 
 ZenvaRunner.Game.prototype = {
 	create: function() {
 		this.game.world.bound = new Phaser.Rectangle(0, 0, this.game.width + 300, this.game.height);
 
-		//create background
-		this.background = this.game.add.tileSprite(0, 0, this.game.width,this.game.height, 'background');
+				
+		//create space background
+		this.background = this.game.add.tileSprite(0, 0, this.game.width,this.game.height, 'background1');
 		this.background.autoScroll(-300, 0); // This is going to have it scroll 
 
-		this.foreground = this.game.add.tileSprite(0, 315, this.game.width, this.game.height, 'foreground'); //460+73=533. 533 is the height of the game in total minus the height of the background and the height of the ground. 
+		this.foreground = this.game.add.tileSprite(0, 315, this.game.width, this.game.height, 'foreground1'); //460+73=533. 533 is the height of the game in total minus the height of the background and the height of the ground. 
 		this.foreground.autoScroll(-300,0); 
-
-
-		/*
-		//Background
-		this.background = this.game.add.tileSprite(0, 0, this.game.width, 512, 'background');
-		this.background.autoScroll(-200, 0); // This is going to have it scroll 
-
-		this.foreground = this.game.add.tileSprite(0, 470, this.game.width, this.game.height - 533, 'foreground'); //460+73=533. 533 is the height of the game in total minus the height of the background and the height of the ground. 
-		this.foreground.autoScroll(-200,0); 
-		*/
 		
+		
+		//create station background
+		this.background1 = this.game.add.tileSprite(0, 0, this.game.width, 512, 'background');
+		this.background1.autoScroll(-200, 0); // This is going to have it scroll
+		this.background1.alpha = 0; 
+
+		this.foreground1 = this.game.add.tileSprite(0, 470, this.game.width, this.game.height - 533, 'foreground'); //460+73=533. 533 is the height of the game in total minus the height of the background and the height of the ground. 
+		this.foreground1.autoScroll(-200,0); 
+		this.foreground1.alpha = 0;
+		
+
 		this.ground = this.game.add.tileSprite(0, this.game.height-73, this.game.width, 73, 'ground');
 		this.ground.autoScroll(-400, 0); // have ground move faster 
 		
@@ -88,6 +93,42 @@ ZenvaRunner.Game.prototype = {
 
 	},
 	update: function() {
+
+		if (this.backgroundCounter > 100){
+			//var foregroundFadeTween = this.game.add.tween(this.foreground).to({alpha: 0}, 500, Phaser.Easing.Linear.None, true);
+			//var backgroundFadeTween = this.game.add.tween(this.background).to({alpha: 0}, 500, Phaser.Easing.Linear.None, true);
+			//backgroundFadeTween.onComplete.add(function() {
+				if (this.backgroundSelector == 0){
+					var foregroundFadeTween = this.game.add.tween(this.foreground).to({alpha: 0}, 500, Phaser.Easing.Linear.None, true);
+					var backgroundFadeTween = this.game.add.tween(this.background).to({alpha: 0}, 500, Phaser.Easing.Linear.None, true);
+					backgroundFadeTween.onComplete.add(function() {
+						var backgroundFadeTween1 = this.game.add.tween(this.background1).to({alpha: 1}, 500, Phaser.Easing.Linear.None, true);
+						var foregroundFadeTween1 = this.game.add.tween(this.foreground1).to({alpha: 1}, 500, Phaser.Easing.Linear.None, true);
+					//this.background.loadTexture('background1');
+					//this.foreground.loadTexture('foreground1');
+					this.backgroundSelector = 1;
+					}, this)  
+				} else {
+					//this.background.loadTexture('background');
+					//this.foreground.loadTexture('foreground');
+					var foregroundFadeTween1 = this.game.add.tween(this.foreground1).to({alpha: 0}, 500, Phaser.Easing.Linear.None, true);
+					var backgroundFadeTween1 = this.game.add.tween(this.background1).to({alpha: 0}, 500, Phaser.Easing.Linear.None, true);
+					backgroundFadeTween1.onComplete.add(function() {
+						var backgroundFadeTween = this.game.add.tween(this.background).to({alpha: 1}, 500, Phaser.Easing.Linear.None, true);
+						var foregroundFadeTween = this.game.add.tween(this.foreground).to({alpha: 1}, 500, Phaser.Easing.Linear.None, true);
+					//this.background.loadTexture('background1');
+					//this.foreground.loadTexture('foreground1');
+					this.backgroundSelector = 0;
+					}, this)  
+				}
+				//foregroundFadeTween = this.game.add.tween(this.foreground).to({alpha: 1}, 500, Phaser.Easing.Linear.None, true);
+				//backgroundFadeTween = this.game.add.tween(this.background).to({alpha: 1}, 500, Phaser.Easing.Linear.None, true);
+
+				//}, this)
+				
+			this.backgroundCounter = 0;
+		}
+
 		 if(this.game.input.activePointer.isDown && this.gameState == 'Running') {
       		this.player.body.velocity.y -= 40;
       		if(!this.jetSound.isPlaying) {
@@ -127,8 +168,10 @@ ZenvaRunner.Game.prototype = {
 			this.distanceScore = Math.floor(this.distance);
 			this.distanceText.text = 'Distance: ' + this.distanceScore +'M';
 			this.score = this.distanceScore  + this.coinScore*10;
-			this.scoreText.text = 'Score: ' + this.score; 
-		}
+			this.scoreText.text = 'Score: ' + this.score;
+			this.backgroundCounter += 1; 
+			console.log(this.backgroundCounter); 
+		}		
 
 
 		this.game.physics.arcade.collide(this.player, this.ground, this.groundHit, null, this); // puts player on ground
@@ -148,6 +191,8 @@ ZenvaRunner.Game.prototype = {
 		this.coinTimer = 0;
 		this.enemyTimer = 0; 
 		this.score = 0;
+		this.backgroundCounter = 0;
+		this.backgroundSelector = 0;  
 		this.gameState = 'Running';
 
 	},

@@ -3,10 +3,10 @@ ZenvaRunner.MainMenu = function() {};
 ZenvaRunner.MainMenu.prototype = {
 	create: function() {
 		//create background
-		this.background = this.game.add.tileSprite(0, 0, this.game.width,this.game.height, 'background');
+		this.background = this.game.add.tileSprite(0, 0, this.game.width,this.game.height, 'background1');
 		this.background.autoScroll(-300, 0); // This is going to have it scroll 
 
-		this.foreground = this.game.add.tileSprite(0, 315, this.game.width, this.game.height, 'foreground'); //460+73=533. 533 is the height of the game in total minus the height of the background and the height of the ground. 
+		this.foreground = this.game.add.tileSprite(0, 315, this.game.width, this.game.height, 'foreground1'); //460+73=533. 533 is the height of the game in total minus the height of the background and the height of the ground. 
 		this.foreground.autoScroll(-300,0); 
 
 		/*
