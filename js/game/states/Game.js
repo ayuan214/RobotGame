@@ -22,15 +22,27 @@ ZenvaRunner.Game = function() {
 ZenvaRunner.Game.prototype = {
 	create: function() {
 		this.game.world.bound = new Phaser.Rectangle(0, 0, this.game.width + 300, this.game.height);
+
+		//create background
+		this.background = this.game.add.tileSprite(0, 0, this.game.width,this.game.height, 'background');
+		this.background.autoScroll(-300, 0); // This is going to have it scroll 
+
+		this.foreground = this.game.add.tileSprite(0, 315, this.game.width, this.game.height, 'foreground'); //460+73=533. 533 is the height of the game in total minus the height of the background and the height of the ground. 
+		this.foreground.autoScroll(-300,0); 
+
+
+		/*
+		//Background
 		this.background = this.game.add.tileSprite(0, 0, this.game.width, 512, 'background');
 		this.background.autoScroll(-200, 0); // This is going to have it scroll 
 
 		this.foreground = this.game.add.tileSprite(0, 470, this.game.width, this.game.height - 533, 'foreground'); //460+73=533. 533 is the height of the game in total minus the height of the background and the height of the ground. 
 		this.foreground.autoScroll(-200,0); 
-
+		*/
+		
 		this.ground = this.game.add.tileSprite(0, this.game.height-73, this.game.width, 73, 'ground');
 		this.ground.autoScroll(-400, 0); // have ground move faster 
-
+		
 
 		//create player
 		this.player = this.add.sprite(200, this.game.height/2, 'player');
