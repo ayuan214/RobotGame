@@ -2,12 +2,22 @@ ZenvaRunner.MainMenu = function() {};
 
 ZenvaRunner.MainMenu.prototype = {
 	create: function() {
-		//create background
-		this.background = this.game.add.tileSprite(0, 0, this.game.width,this.game.height, 'background1');
-		this.background.autoScroll(-300, 0); // This is going to have it scroll 
+		var pixelDensity = Math.floor(this.game.device.pixelRatio);
+		if (pixelDensity > 1){pixelDensity = pixelDensity/2;}
+		//pixelDensity = 2; 
 
-		this.foreground = this.game.add.tileSprite(0, 315, this.game.width, this.game.height, 'foreground1'); //460+73=533. 533 is the height of the game in total minus the height of the background and the height of the ground. 
+		//create background
+		
+		this.background = this.game.add.tileSprite(0, 0, this.game.width,this.game.height, 'background1');
+		this.background.scale.setTo(pixelDensity);
+		this.background.autoScroll(-300, 0); // This is going to have it scroll
+
+
+		this.foreground = this.game.add.tileSprite(0, 0, this.game.width, 284, 'foreground1'); //460+73=533. 533 is the height of the game in total minus the height of the background and the height of the ground. 
+		this.foreground.scale.setTo(pixelDensity);
 		this.foreground.autoScroll(-300,0); 
+		//console.log('This.foreground.height = ' + this.foreground.height);
+		//console.log('This.foreground.y.old = ' + this.foreground.y);
 
 		/*
 		this.background = this.game.add.tileSprite(0, 0, this.game.width, 512, 'background');
@@ -18,14 +28,22 @@ ZenvaRunner.MainMenu.prototype = {
 		
 		*/
 
-		this.ground = this.game.add.tileSprite(0, this.game.height-73, this.game.width, 73, 'ground');
-		this.ground.autoScroll(-400, 0); // have ground move faster 
+		this.ground = this.game.add.tileSprite(0, this.game.height-73 , this.game.width, 73, 'ground');
+		//console.log('This.ground.y.old = ' + this.ground.y);
+		this.ground.scale.setTo(pixelDensity);
+		this.ground.y = Math.floor(this.game.height - this.ground.height * (pixelDensity));
+		//console.log('This.ground.y.new = ' + this.ground.y);
+		this.ground.autoScroll(-400, 0); // have ground move faster
+		this.foreground.y = Math.floor(this.game.height - (this.ground.height * pixelDensity) - (this.foreground.height * pixelDensity));  
+		//this.foreground.y = 400
+		//console.log('This.foreground.y.new = ' + this.foreground.y);
+
 		
 
 		//create player
 		this.player = this.add.sprite(200, this.game.height/2, 'player');
 		this.player.anchor.setTo(0.5); //determines where the rotation would occur of sprite as well
-		this.player.scale.setTo(1.1); //scales down sprite
+		this.player.scale.setTo(1.1 * pixelDensity); //scales down sprite
 
 		this.player.animations.add('fly', [0,1,2,1]);
 		this.player.animations.play('fly', 8, true); //this.player.animations.play(key, fps, loop?)
@@ -35,9 +53,9 @@ ZenvaRunner.MainMenu.prototype = {
 		//tween is game object animation. Add a tween object .to (JSON object of objects want to change [this game y], 500 ms the player y position is, BOB up and down, easing, auto start, don't add delay [0], repeat infinite, and want to yo-yo is to come back up and down )
 
 		//Adding titles
-		this.splash = this.add.sprite(this.game.world.centerX, this.game.world.centerY, 'logo');
+		this.splash = this.add.sprite(this.game.width/2, this.game.height/2, 'logo');
 		this.splash.anchor.setTo(0.5);
-		this.splash.scale.setTo(0.5);
+		this.splash.scale.setTo(0.5 * pixelDensity);
 
 		this.startText = this.game.add.bitmapText(0,0, 'minecraftia', 'tap to start', 32);
 		this.startText.x = this.game.width/2 - this.startText.textWidth/2; 

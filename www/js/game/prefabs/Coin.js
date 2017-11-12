@@ -2,7 +2,10 @@ var Coin = function(game, x, y, key, frame){
 	key = 'coins';
 	Phaser.Sprite.call(this, game, x, y, key, frame);
 
-	this.scale.setTo(1.2);
+	var pixelDensity = Math.floor(this.game.device.pixelRatio);
+	if (pixelDensity > 1){pixelDensity = pixelDensity/2;}
+
+	this.scale.setTo(1.2 * pixelDensity);
 	this.anchor.setTo(0.5); 
 
 	this.animations.add('spin');
@@ -15,6 +18,7 @@ var Coin = function(game, x, y, key, frame){
 
 	this.events.onKilled.add(this.onKilled, this);
 	this.events.onRevived.add(this.onRevived, this); // sets invisible properties to be true
+	console.log(pixelDensity);
 
 };
 

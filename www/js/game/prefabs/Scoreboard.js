@@ -29,26 +29,26 @@ Scoreboard.prototype.show = function(score){
 
 	this.y = this.game.height; //need to set to bottom to fly up to screen. 
 
-	gameoverText = this.game.add.bitmapText(0,100, 'minecraftia', 'GAME OVER', 36);
+	gameoverText = this.game.add.bitmapText(0, 100, 'minecraftia', 'GAME OVER', 36);
 	gameoverText.x = this.game.width/2 - (gameoverText.textWidth/2);
 	this.add(gameoverText); 
 
 
-	logoSplash = this.game.add.image(0,175, 'logo');
+	logoSplash = this.game.add.image(0, 175, 'logo');
 	logoSplash.scale.setTo(0.3);
 	logoSplash.x = this.game.width/2 - logoSplash.width/2;
 	this.add(logoSplash);
 
 
-	scoreText = this.game.add.bitmapText(0,300, 'minecraftia', 'Your Score: ' + score, 24);
+	scoreText = this.game.add.bitmapText(0, 300, 'minecraftia', 'Your Score: ' + score, 24);
 	scoreText.x = this.game.width/2 - (scoreText.textWidth/2);
 	this.add(scoreText); 
 
-	highScoreText = this.game.add.bitmapText(0,350, 'minecraftia', 'Your High Score: ' + highscore, 24);
+	highScoreText = this.game.add.bitmapText(0, 350, 'minecraftia', 'Your High Score: ' + highscore, 24);
 	highScoreText.x = this.game.width/2 - (highScoreText.textWidth/2);
 	this.add(highScoreText); 
 
-	startText = this.game.add.bitmapText(0,400, 'minecraftia', 'Tap to Play Again!', 16);
+	startText = this.game.add.bitmapText(0, 400, 'minecraftia', 'Tap to Play Again!', 16);
 	startText.x = this.game.width/2 - (startText.textWidth/2);
 	this.add(startText); 
 

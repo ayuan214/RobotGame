@@ -2,7 +2,10 @@ var Enemy = function(game, x, y, key, frame){
 	key = 'missile';
 	Phaser.Sprite.call(this, game, x, y, key, frame);
 
-	this.scale.setTo(0.15);
+	var pixelDensity = Math.floor(this.game.device.pixelRatio);
+	if (pixelDensity > 1){pixelDensity = pixelDensity/2;}
+
+	this.scale.setTo(0.15 * pixelDensity);
 	this.anchor.setTo(0.5); 
 
 	this.animations.add('fly');

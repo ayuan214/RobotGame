@@ -18,8 +18,6 @@ ZenvaRunner.Preload.prototype = {
 		this.load.image('foreground', 'assets/images/foreground.png');
 		this.load.image('foreground1', 'assets/images/foreground1.png');
 
-
-
 		//this.load.spritesheet('coins', 'assets/images/coins-ps.png', 51, 51, 7);
 		//this.load.spritesheet('player', 'assets/images/jetpack-ps.png', 229, 296, 4);
 		this.load.spritesheet('coins', 'assets/images/EnergyCapsule.png', 20, 31, 10);
@@ -27,7 +25,7 @@ ZenvaRunner.Preload.prototype = {
 		this.load.spritesheet('missile', 'assets/images/missiles-ps.png', 361, 218, 4);
 
 
-		this.load.audio('gameMusic', ['assets/audio/GWING_01.mp3', 'assets/audio/GWING_01.ogg']);
+		this.load.audio('gameMusic', ['assets/audio/GWing_01.ogg', 'assets/audio/GWing_01.m4a', ]);
     	this.load.audio('rocket', 'assets/audio/rocket.wav');
     	this.load.audio('coin', 'assets/audio/energy.wav');
     	this.load.audio('death', 'assets/audio/death1.wav');

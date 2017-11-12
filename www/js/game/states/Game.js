@@ -1,4 +1,5 @@
 ZenvaRunner.Game = function() {
+
 	this.gameState = 'Running';
 	this.playerMinAngle = -20;
 	this.playerMaxAngle = 20;
@@ -24,35 +25,48 @@ ZenvaRunner.Game = function() {
 
 ZenvaRunner.Game.prototype = {
 	create: function() {
+		this.pixelDensity = Math.floor(this.game.device.pixelRatio);
+		if (this.pixelDensity > 1){this.pixelDensity = this.pixelDensity/2;}
+		//console.log(this.pixelDensity);
+
 		this.game.world.bound = new Phaser.Rectangle(0, 0, this.game.width + 300, this.game.height);
 
 				
 		//create space background
 		this.background = this.game.add.tileSprite(0, 0, this.game.width,this.game.height, 'background1');
+		this.background.scale.setTo(this.pixelDensity);
 		this.background.autoScroll(-300, 0); // This is going to have it scroll 
 
-		this.foreground = this.game.add.tileSprite(0, 315, this.game.width, this.game.height, 'foreground1'); //460+73=533. 533 is the height of the game in total minus the height of the background and the height of the ground. 
+		this.foreground = this.game.add.tileSprite(0, 315, this.game.width, 284, 'foreground1'); //460+73=533. 533 is the height of the game in total minus the height of the background and the height of the ground. 
+		this.foreground.scale.setTo(this.pixelDensity);
 		this.foreground.autoScroll(-300,0); 
 		
 		
 		//create station background
-		this.background1 = this.game.add.tileSprite(0, 0, this.game.width, 512, 'background');
-		this.background1.autoScroll(-200, 0); // This is going to have it scroll
-		this.background1.alpha = 0; 
 
-		this.foreground1 = this.game.add.tileSprite(0, 470, this.game.width, this.game.height - 533, 'foreground'); //460+73=533. 533 is the height of the game in total minus the height of the background and the height of the ground. 
+		this.foreground1 = this.game.add.tileSprite(0, 470, this.game.width, this.game.height, 'foreground'); //460+73=533. 533 is the height of the game in total minus the height of the background and the height of the ground. 
+		this.foreground1.scale.setTo(this.pixelDensity);
 		this.foreground1.autoScroll(-200,0); 
 		this.foreground1.alpha = 0;
+
+		this.background1 = this.game.add.tileSprite(0, 0, this.game.width, 472, 'background');
+		this.background1.scale.setTo(this.pixelDensity);
+		this.background1.autoScroll(-200, 0); // This is going to have it scroll
+		this.background1.alpha = 0; 
 		
 
 		this.ground = this.game.add.tileSprite(0, this.game.height-73, this.game.width, 73, 'ground');
+		this.ground.scale.setTo(this.pixelDensity);
+		this.ground.y = Math.floor(this.game.height - this.ground.height * (this.pixelDensity));
 		this.ground.autoScroll(-400, 0); // have ground move faster 
+
+		this.foreground.y = Math.floor(this.game.height - (this.ground.height * this.pixelDensity) - (this.foreground.height * this.pixelDensity)); 
 		
 
 		//create player
 		this.player = this.add.sprite(200, this.game.height/2, 'player');
 		this.player.anchor.setTo(0.5); //determines where the rotation would occur of sprite as well
-		this.player.scale.setTo(1.1); //scales down sprite
+		this.player.scale.setTo(1.1 * this.pixelDensity); //scales down sprite
 
 		this.player.animations.add('fly', [0,1,2,1]);
 		this.player.animations.play('fly', 10, true);
@@ -94,6 +108,7 @@ ZenvaRunner.Game.prototype = {
 	},
 	update: function() {
 
+		// changes background color
 		if (this.backgroundCounter > 1000){
 				if (this.backgroundSelector == 0){
 					var foregroundFadeTween = this.game.add.tween(this.foreground).to({alpha: 0}, 500, Phaser.Easing.Linear.None, true);
@@ -158,7 +173,7 @@ ZenvaRunner.Game.prototype = {
 			this.score = this.distanceScore  + this.coinScore*10;
 			this.scoreText.text = 'Score: ' + this.score;
 			this.backgroundCounter += 1; 
-			console.log(this.backgroundCounter); 
+			//console.log(this.backgroundCounter); 
 		}		
 
 

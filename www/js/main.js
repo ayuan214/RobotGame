@@ -5,6 +5,4 @@ game.state.add('Preloader', ZenvaRunner.Preload);
 game.state.add('MainMenu', ZenvaRunner.MainMenu);
 game.state.add('Game', ZenvaRunner.Game);
 
-
-
 game.state.start('Boot');
