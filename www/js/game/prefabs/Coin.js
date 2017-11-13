@@ -18,8 +18,6 @@ var Coin = function(game, x, y, key, frame){
 
 	this.events.onKilled.add(this.onKilled, this);
 	this.events.onRevived.add(this.onRevived, this); // sets invisible properties to be true
-	console.log(pixelDensity);
-
 };
 
 Coin.prototype = Object.create(Phaser.Sprite.prototype);

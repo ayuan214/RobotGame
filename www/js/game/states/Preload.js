@@ -23,7 +23,7 @@ ZenvaRunner.Preload.prototype = {
 		this.load.spritesheet('coins', 'assets/images/EnergyCapsule.png', 20, 31, 10);
 		this.load.spritesheet('player', 'assets/images/WingZero_Flight4.png', 110, 96, 4);
 		this.load.spritesheet('missile', 'assets/images/missiles-ps.png', 361, 218, 4);
-
+		this.load.spritesheet('vlaser', 'assets/images/VLaser-Sprite.png', 130, 588);  
 
 		this.load.audio('gameMusic', ['assets/audio/GWing_01.ogg', 'assets/audio/GWing_01.m4a', ]);
     	this.load.audio('rocket', 'assets/audio/rocket.wav');

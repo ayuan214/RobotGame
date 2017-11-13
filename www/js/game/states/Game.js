@@ -7,8 +7,11 @@ ZenvaRunner.Game = function() {
 	this.coinRate = 1000; // every 1000 ms new coin
 	this.coinTimer = 0; // what is being checked every game loop to make new coin 
 
-	this.enemyRate = 2000;
-	this.enemyTimer = 0; 
+	this.enemyRate = 3000;
+	this.enemyTimer = 1000;
+
+	this.vlaserRate = 2000;
+	this.vlaserTimer = 0;  
 
 	this.coinScore = 0;
 	this.distance = 0; 
@@ -74,7 +77,7 @@ ZenvaRunner.Game.prototype = {
 
 		//enable physics
 		this.game.physics.startSystem(Phaser.Physics.ARCADE);
-		this.game.physics.arcade.gravity.y = 800; //gravity of game
+		this.game.physics.arcade.gravity.y = 900; //gravity of game
 
 		this.game.physics.arcade.enableBody(this.ground);
 		this.ground.body.allowGravity = false; // don't let ground fall
@@ -84,15 +87,24 @@ ZenvaRunner.Game.prototype = {
 		this.player.body.collideWorldBounds = true; // prevents player form falling off screen; 
 		//this.player.body.bounce.set(0.25, 0.25); //bounce when hit the ground
 
-		this.coins = this.game.add.group();
+		//console.log("Player Width Old = " + this.player.body.width);
+		//console.log("Player Height Old = " + this.player.body.height);
+
+		this.player.body.width = this.player.body.width * .6; 
+		this.player.body.height = this.player.body.height * .6; 
+
+		//console.log("Player Width New = " + this.player.body.width);
+		//console.log("Player Height New = " + this.player.body.height);
 
 		this.enemies = this.game.add.group(); 
+
+		this.coins = this.game.add.group();
+
+		this.vlasers = this.game.add.group(); 
 
 		this.scoreText = this.game.add.bitmapText(10, 10, 'minecraftia', 'Score: 0', 24);
 		this.distanceText = this.game.add.bitmapText(15, 40, 'minecraftia', 'Distance: 0 M', 16);
 		this.coinText = this.game.add.bitmapText(15, 60, 'minecraftia', 'Coin: 0', 16); 
-
-		
 
 		//Sounds
 		this.jetSound = this.game.add.audio('rocket');
@@ -104,10 +116,8 @@ ZenvaRunner.Game.prototype = {
 
 		this.coinSpawnX = this.game.width + 64; 
 
-
 	},
 	update: function() {
-
 		// changes background color
 		if (this.backgroundCounter > 1000){
 				if (this.backgroundSelector == 0){
@@ -165,6 +175,11 @@ ZenvaRunner.Game.prototype = {
 			this.enemyTimer = this.game.time.now + this.enemyRate; 
 		}
 
+		if(this.vlaserTimer < this.game.time.now){
+			this.createVLaser();
+			this.vlaserTimer = this.game.time.now + this.vlaserRate; 
+		}
+
 		
 		if(this.gameState == "Running"){
 			this.distance += .2;
@@ -176,23 +191,27 @@ ZenvaRunner.Game.prototype = {
 			//console.log(this.backgroundCounter); 
 		}		
 
-
 		this.game.physics.arcade.collide(this.player, this.ground, this.groundHit, null, this); // puts player on ground
 		if(this.gameState != "GameOver"){
 			this.game.physics.arcade.overlap(this.player, this.coins, this.coinHit, null, this); //checks overlap to add points
+			this.game.physics.arcade.overlap(this.player, this.enemies, this.enemyHit, null, this); //checks overlap to end game
+			this.game.physics.arcade.overlap(this.player, this.vlasers, this.enemyHit, null, this); //checks overlap to end game
 		}
-		this.game.physics.arcade.overlap(this.player, this.enemies, this.enemyHit, null, this); //checks overlap to end game
+	
+
 
 	},
 	shutdown: function() {
 		this.player.kill();
 		this.coins.destroy();
 		this.enemies.destroy();
+		this.vlasers.destroy();
 		this.distance = 0;
 		this.distanceScore = 0;
 		this.coinScore = 0; 
 		this.coinTimer = 0;
 		this.enemyTimer = 0; 
+		this.vlaserTimer = 0; 
 		this.score = 0;
 		this.backgroundCounter = 0;
 		this.backgroundSelector = 0;  
@@ -287,6 +306,20 @@ ZenvaRunner.Game.prototype = {
 		enemy.revive(); 
 	},
 
+	createVLaser: function() {
+		var x = this.game.width; 
+		var y = this.game.rnd.integerInRange(Math.floor(this.pixelDensity * 192/2), Math.floor(this.game.world.height-(this.pixelDensity * 200) - (this.pixelDensity *73))); 
+
+		var vlaser = this.vlasers.getFirstExists(false); 
+		if(!vlaser) {
+			vlaser = new VLaser(this.game, 0, 0); 
+			this.vlasers.add(vlaser);
+		}
+
+		vlaser.reset(x,y); //sets the sprite x & y position 
+		vlaser.revive(); 
+	},
+
 	groundHit: function(player, ground){
 		if (this.gameState == 'GameOver') {
 			this.player.angle = 270;
@@ -320,8 +353,11 @@ ZenvaRunner.Game.prototype = {
 
 	enemyHit: function(player, enemy){
 		this.gameState = 'GameOver';
-		//player.kill();
-		enemy.kill();
+		console.log(enemy); 
+		if (enemy.key == 'missile') {
+			enemy.kill();
+		}
+
 		this.player.animations.stop('fly'); 
 		this.player.animations.add('fall', [3]);
 		this.player.animations.play('fall', 1, false);
@@ -334,9 +370,12 @@ ZenvaRunner.Game.prototype = {
 
 		this.enemies.setAll('body.velocity.x', 0); //Run through the group to set all
 		this.coins.setAll('body.velocity.x', 0); //Run through the group to set all
+		this.vlasers.setAll('body.velocity.x', 0); //Run through the group to set all
+
 
 		this.enemyTimer = Number.MAX_VALUE; //stops spawning enmies 
 		this.coinTimer = Number.MAX_VALUE; // Stops spawning coins
+		this.vlaserTimer = Number.MAX_VALUE; // Stops spawning lasers
 
 		
 		

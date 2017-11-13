@@ -5,7 +5,7 @@ var Enemy = function(game, x, y, key, frame){
 	var pixelDensity = Math.floor(this.game.device.pixelRatio);
 	if (pixelDensity > 1){pixelDensity = pixelDensity/2;}
 
-	this.scale.setTo(0.15 * pixelDensity);
+	this.scale.setTo(0.15);
 	this.anchor.setTo(0.5); 
 
 	this.animations.add('fly');
