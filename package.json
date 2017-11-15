@@ -20,7 +20,9 @@
     "url": "https://github.com/ayuan214/RobotGame/issues"
   },
   "homepage": "https://github.com/ayuan214/RobotGame#readme",
-  "dependencies": {
-    "express": "^4.16.2"
+
+  "engines": {
+    "node": "6.7.0",
+    "npm": "3.10.3"
   }
 }
